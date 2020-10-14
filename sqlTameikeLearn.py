@@ -26,8 +26,7 @@ os.makedirs('/var/app/tameike', exist_ok=True)
 
 nowHour = datetime.datetime.now().time().hour
 
-placeId = str(nowHour)
-placeId = "1"
+placeId = str(nowHour + 1)
 
 before = 14
 Output_set = before + 23
