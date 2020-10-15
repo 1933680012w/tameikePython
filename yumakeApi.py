@@ -15,7 +15,10 @@ for item in placeRows:
     arr_lastPredictTime = np.array(lastPredictTimeRows)
     lastPredictTime = np.transpose(arr_lastPredictTime[0])
 
-    print(lastPredictTime)
+    if lastPredictTime == None:
+        lastPredictTime = datetime.datetime.now()
+    else :
+        lastPredictTime = lastPredictTime[0]
     url = "http://api.yumake.jp/1.0/forecastMsm.php?lat=" + str(item[4]) + "&lon=" + str(item[3]) + "&key=" + yumakeKey
 
     getDataFlg = False
@@ -56,7 +59,7 @@ for item in placeRows:
         for index, row in df.iterrows():
             if datetime.datetime.now()  > datetime.datetime.strptime(row[2], '%Y/%m/%d %H:%M'):
                 pass
-            elif datetime.datetime.strptime(row[2], '%Y/%m/%d %H:%M') <=  lastPredictTime[0]:
+            elif datetime.datetime.strptime(row[2], '%Y/%m/%d %H:%M') <=  lastPredictTime:
                 fnSQL.sqlInsertUpdate('update predictPrecipitations set precipitation = "'  + str(row[1]) + '",modified = "' + datetime.datetime.now().strftime('%Y/%m/%d %H:%M:00') + '" where place_id = ' + str(item[0]) + ' and predictTime = "'+str(row[2])+':00"')
             else :
                 fnSQL.sqlInsertUpdate('insert into predictPrecipitations(predictTime,precipitation,place_id) values ("' + str(row[2]) + ':00","'  + str(row[1]) + '", ' + str(item[0]) + ') ')
